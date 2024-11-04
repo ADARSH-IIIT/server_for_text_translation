@@ -1,8 +1,14 @@
 import express from 'express';
-import { translate }from '@vitalets/google-translate-api';
+import cors from 'cors';  // Import cors
+import { translate } from "google-translate-api-browser";
 
 const app = express();
-app.use(express.json()); // Middleware to parse JSON request bodies
+
+// Enable CORS for all routes
+app.use(cors());
+
+// Middleware to parse JSON request bodies
+app.use(express.json());
 
 // POST route to handle translation requests
 app.post('/translate', async (req, res) => {
@@ -17,6 +23,8 @@ app.post('/translate', async (req, res) => {
         const result = await translate(text, { to: to_language });
 
         // Send the translated text as a JSON response
+        console.log(result.text);
+        
         res.json({ translatedText: result.text });
     } catch (error) {
         console.error('Translation error:', error);
